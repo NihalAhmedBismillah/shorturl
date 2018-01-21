@@ -8,6 +8,7 @@ class ClsShortUrl {
        this.longUrl = '';
        this.userInfo = {};
        this.createdOn = new Date().toISOString();
+       this.clientId ='';
     }
    
 }

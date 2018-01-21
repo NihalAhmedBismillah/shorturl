@@ -13,7 +13,7 @@ class App {
             await dbl.dbConnect();
             await middlewares.init(app);
             await shortUrlCrtl.init(app);
-            runJob.runJobs();
+            await runJob.runJobs();
             return app.listen(8080, "127.0.0.1");
 
         } catch (error) {

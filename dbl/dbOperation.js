@@ -5,14 +5,16 @@
 
 const config = require('../config.json');
 const MongoClient = require('mongodb').MongoClient;
-
+let locator = new Map();
 class ClsMongodb {
 
   // connect monogodb data base
   static dbConnect() {
 
     return new Promise((resolve, reject) => {
-
+      //map config json file in locator
+      locator.set('config', config);
+      //
       if (global.db === undefined) {
 
         MongoClient.connect(config.dbConnectionUrl + config.dbName, (error, db) => {
@@ -21,8 +23,10 @@ class ClsMongodb {
             reject(error);
           }
           else {
-
+            locator.set('db', db);
             global.db = db;
+            // assign locator in global variable
+            global.locator = locator;
             resolve(true);
           }
         });

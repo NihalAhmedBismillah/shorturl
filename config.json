@@ -2,7 +2,18 @@
     "dbName": "ShortUrl",
     "PORT": "8080",
     "dbConnectionUrl": "mongodb://127.0.0.1:27017/",
-    "baseUrl":"http://localhost:8080/",
-    "secret": "asdfadfadfcx4223ew"
-
+    "baseUrl": "http://localhost:8080/",
+    "secret": "asdfadfadfcx4223ew",
+    "schedules": [
+        {
+            "actionFunName": "removeExpireUrl",
+            "cronTime": "*/2 * * * *",
+            "startFlag": false
+        },
+        {
+            "actionFunName": "test",
+            "cronTime": "",
+            "startFlag": false
+        }
+    ]
 }
