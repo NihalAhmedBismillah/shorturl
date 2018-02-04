@@ -2,28 +2,38 @@
 <html lang="en">
 
 <head>
-    <title></title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <% include ../partials/head %>
 </head>
 
-<body>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6 col-md-offset-3">
-                <h1>Welcome to Nihal Ahmed home page</h1>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                            <h4><%= link %></h> </br>
-                        <p>
-                            <a href="<%=link%>" class="btn btn-primary" role="button">Click to navigate</a>
-                
-                        </p>
-                    </div>
-                </div>
+<body class="container">
+    <header>
+        <% include ../partials/header %>
+    </header>
+    <main>
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-lg-6 col-md-offset-3">
+                    <h1></h1>
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>
+                                <%= link %>
+                                    </h>
+                                    </br>
+                                    <p>
+                                        <a href="<%=link%>" class="btn btn-primary" role="button">Click to navigate</a>
 
+                                    </p>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
+    </main>
+    <footer>
+        <% include ../partials/footer %>
+    </footer>
 </body>
 
 </html>

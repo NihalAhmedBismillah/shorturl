@@ -6,7 +6,8 @@
 const config = require('../config.json');
 const MongoClient = require('mongodb').MongoClient;
 let locator = new Map();
-class ClsMongodb {
+
+class DbConnect {
 
   // connect monogodb data base
   static dbConnect() {
@@ -15,8 +16,7 @@ class ClsMongodb {
       //map config json file in locator
       locator.set('config', config);
       //
-      if (global.db === undefined) {
-
+      if (!global.locator || !global.locator.db) {
         MongoClient.connect(config.dbConnectionUrl + config.dbName, (error, db) => {
           if (error) {
             console.log('Database connection error occur!', JSON.stringify(error));
@@ -24,31 +24,18 @@ class ClsMongodb {
           }
           else {
             locator.set('db', db);
-            global.db = db;
             // assign locator in global variable
             global.locator = locator;
             resolve(true);
           }
         });
       } else {
+        global.locator = locator;
         resolve(true);
       }
     });
   }
-
-  // save data in to data base
-  static insert() {
-
-    return new Promise((resolve, reject) => {
-      // TODO some async operation 
-      resolve();
-    })
-
-  }
-
-
-
 }
-module.exports = ClsMongodb;
+module.exports = DbConnect;
 
 

@@ -1,9 +1,9 @@
 
-const dbl = require('./dbl/dbOperation');
-const shortUrlCrtl = require('./route/shortUrlController');
-const middlewares = require('./middlewares/allMWare');
-const express = require('express');
-const runJob = require('./lib/scheduler');
+const dbl = require('./dbl/dbConnect'),
+    registerCrtls = require('./utility/registerControllers'),
+    middlewares = require('./middlewares/allMWare'),
+    express = require('express'),
+    runJob = require('./lib/scheduler');
 
 class App {
 
@@ -12,9 +12,10 @@ class App {
             let app = express();
             await dbl.dbConnect();
             await middlewares.init(app);
-            await shortUrlCrtl.init(app);
+            await registerCrtls.init(app);
             await runJob.runJobs();
-            return app.listen(8080, "127.0.0.1");
+            const PORT = global.locator.get('config').PORT || 3001;
+            app.listen(PORT);
 
         } catch (error) {
             throw error;
@@ -22,10 +23,10 @@ class App {
     }
 }
 
-App.run().then((data) => {
-    console.log('server started on : 8080');
+App.run().then(() => {
+    console.log(`server started on : 8080`);
 
 }).catch((error) => {
-    console.log(`Error!  ${error}`);
+    console.log(`Error!  ${JSON.stringify(error)}`);
     process.exit(1);
 });

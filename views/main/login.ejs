@@ -15,18 +15,24 @@
         <div class="jumbotron">
             <div class="row">
                 <div class="col-lg-6 col-md-offset-3">
-                    <h3>Welcome to shourt url </h3>
-                    <form method="post" action="/">
+                    <h3>Login in short url</h3>
+                    <form method="post" action="/password">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label for="long_url">Paste Your Long Url Here: </label>
-                                    <input type="text" id="long_url" class="form-control" name="long_url" placeholder="Paste your long url">
+                                    <label for="long_url">Enter your email id: </label>
+                                    <input type="text" id="emailId" class="form-control" name="emailId" placeholder="Please your email id">
                                 </div>
-                                <button type="submit" class="btn btn-success">Create</button>
+                                <button type="submit" class="btn btn-success">Next</button>
                             </div>
                         </div>
+
                     </form>
+                    <span id="link-signup">
+                            <a href="/user">
+                                Create account
+                            </a>
+                        </span>
                 </div>
             </div>
         </div>

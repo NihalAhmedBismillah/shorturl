@@ -1,9 +1,7 @@
 /**
  * Import npm modules
  */
-
-
-const shortUrl = require('./../lib/shortUrl');
+const shortUrl = require('./../model/shortUrl');
 
 
 class ShortUrlController {
