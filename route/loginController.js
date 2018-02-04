@@ -2,8 +2,7 @@
  * Import npm modules
  */
 
-
-//const shortUrl = require('./../lib/shortUrl');
+const User = require('../model/login');
 
 class LoginController {
 
@@ -17,7 +16,7 @@ class LoginController {
 
             });
             app.post('/password', (req, res) => {
-                  
+
                 res.render('main/password');
 
             });
@@ -31,6 +30,26 @@ class LoginController {
                 res.status(501);
                 res.send('Sorry! not implemented!');
             });
+            app.post('/user', (req, res) => {
+                // TODO: Test only
+                let body = req.body;
+                let user = {
+                    firstName: body.firstName,
+                    login: body.email,
+                    password: body.password,
+                    email: body.email
+                };
+                User.saveUser(user).then((data) => {
+                    res.send(data);
+                }).catch((error) => {
+
+                    console.log(`Error [User Save] ${JSON.stringify(errro)}`);
+                    //TODO: Need to change
+                    res.status(501);
+                    res.send('Sorry! not implemented!');
+                })
+            });
+
             resolve(true);
         });
     }

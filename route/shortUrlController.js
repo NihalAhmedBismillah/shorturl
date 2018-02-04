@@ -14,6 +14,9 @@ class ShortUrlController {
 
                 shortUrl.saveShortUrl(req).then((data) => {
                     res.render('main/index', { link: data.shortUrl });
+                }).catch((error)=>{
+
+                    res.status(404).send('Not found!');
                 });
             });
             app.get('/:shorturl', (req, res) => {
@@ -24,6 +27,8 @@ class ShortUrlController {
                     } else {
                         res.status(404).send('Not found!');
                     }
+                }).catch((error) => {
+                    res.status(404).send('Not found!');
                 });
             });
             app.get('/listshorturl', (req, res, next) => {
