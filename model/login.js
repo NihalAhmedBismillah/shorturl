@@ -1,8 +1,8 @@
 
 const COLLECTION_NAME = 'Users',
     dbOpt = require('../lib/db'),
-    shortid = require('shortid');
-
+    shortid = require('shortid'),
+    Joi = require('joi');
 
 /**
  * Import npm package
@@ -14,30 +14,24 @@ class Login {
 
     }
 
-    static async userLogin(req) {
+    static  userLogin(user) {
 
-        let formData = req.body;
-
-        //Task 1 : validate use request
-        let user = {
-            emailId: req.body.emailId,
-            password: req.body.password
+        //Task 1 : validate use request   
+        let result  = this.validateLogin(user);
+        if (result) {
+            return new Promise((res) => {
+                res(undefined);
+            });
+        } else {
+            let query = { login: user.emailId, password: user.password };
+            return dbOpt.findOne(query, COLLECTION_NAME);
         }
-        if (!this.validateLogin(user)) {
-            throw new Error('Invalid user and password!');
-        }
-
-        //Task 2 : check with data base use name and password
-
-
-        //Task 3 : generate token for use and send in header
-
-
     }
     static getUserByEmailId(email) {
-        return new Promise((res, rej) => {
 
-        });
+        let query = { login: email };
+        return dbOpt.findOne(query, COLLECTION_NAME);
+
     }
 
     static saveUser(user) {
@@ -87,7 +81,7 @@ class Dates {
 }
 
 class UserModel {
-    
+
     constructor() {
 
         this._id = '';

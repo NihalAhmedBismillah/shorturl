@@ -3,26 +3,36 @@
 
 <head>
     <% include ../partials/head %>
+        <script type="text/javascript">
+            $(() => {
+                localStorage.setItem('auth_token', document.getElementById('auth_token').value);
+            });
+        </script>
 </head>
 
 <body class="container">
 
     <header>
-        <% include ../partials/header %>
+        <%- include('../partials/headerhome', {user: data.header}); %>
     </header>
     <main>
 
         <div class="jumbotron">
+            <div class="form-group" hidden="hidden">
+                <label for="long_url">Your Email Id: </label>
+
+                <input type="hidden" id="auth_token" value=<%=data.auth_token %> >
+            </div>
             <div class="row">
                 <div class="col-lg-6 col-md-offset-3">
                     <h3>Welcome to home page shourt url </h3>
-                    
-                        <div class="panel panel-default">
-                            <div class="panel-body">
-                                <h1>Home page </h1>
-                            </div>                
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h1>Home page </h1>
                         </div>
-                    
+                    </div>
+
                 </div>
             </div>
         </div>

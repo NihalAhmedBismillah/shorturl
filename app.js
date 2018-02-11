@@ -3,6 +3,7 @@ const dbl = require('./dbl/dbConnect'),
     registerCrtls = require('./utility/registerControllers'),
     middlewares = require('./middlewares/allMWare'),
     express = require('express'),
+    path = require('path'),
     runJob = require('./lib/scheduler');
 
 class App {
@@ -10,6 +11,9 @@ class App {
     static async run() {
         try {
             let app = express();
+
+            app.use(express.static(__dirname + '/public'));
+            app.use(express.static(__dirname + '/client'));
             await dbl.dbConnect();
             await middlewares.init(app);
             await registerCrtls.init(app);

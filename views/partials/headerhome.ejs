@@ -10,7 +10,7 @@
 
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="/">Home</a>
+                    <a href="/home">Home</a>
                 </li>
                 <li>
                     <a href="/about">About</a>
@@ -19,10 +19,18 @@
                     <a href="/contract">Contract</a>
                 </li>
                 <li>
-                    <a href="/login">Login</a>
+                    <% if (user && user.firstName) { %>
+                        <strong for="logged_user">
+                            Welcome,
+                            <%= user.firstName %>
+                                <%= user.lastName %>
+                        </strong>
+                        <% } %>
+                </li>
+                <li>
+                    <a href="/#" onclick="return logoutClick();">logout</a>
                 </li>
             </ul>
         </div>
-
     </div>
 </nav>

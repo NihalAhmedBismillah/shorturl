@@ -4,6 +4,7 @@
     "dbConnectionUrl": "mongodb://127.0.0.1:27017/",
     "baseUrl": "http://localhost:8080",
     "secret": "asdfadfadfcx4223ew",
+    "tokenExpireTime": 20, 
     "schedules": [
         {
             "actionFunName": "removeExpireUrlTask",

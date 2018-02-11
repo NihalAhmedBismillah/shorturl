@@ -16,23 +16,30 @@
             <div class="row">
                 <div class="col-lg-6 col-md-offset-3">
                     <h3>Login in short url</h3>
-                    <form method="post" action="/password">
+                    <form method="POST" action="/emailnext">
                         <div class="panel panel-default">
                             <div class="panel-body">
                                 <div class="form-group">
                                     <label for="long_url">Enter your email id: </label>
                                     <input type="text" id="emailId" class="form-control" name="emailId" placeholder="Please your email id">
                                 </div>
-                                <button type="submit" class="btn btn-success">Next</button>
+                                <% if (data && data.error) { %>
+                                    <div class="alert alert-danger">
+                                        <strong></strong>
+                                        <%= data.error %>
+                                    </div>
+                                    <% } %>
+                                        <button type="submit" class="btn btn-success">Next</button>
                             </div>
+                            <!-- <button  class="btn btn-success"onclick="nextClick()">Nihal</button> -->
                         </div>
 
                     </form>
                     <span id="link-signup">
-                            <a href="/user">
-                                Create account
-                            </a>
-                        </span>
+                        <a href="/user">
+                            Create account
+                        </a>
+                    </span>
                 </div>
             </div>
         </div>
