@@ -41,7 +41,6 @@ class LoginController {
                     res.send(`Internal Server Error`);
                 });
             });
-
             app.get('/home', (req, res) => {
 
                 if (req.session && req.session.email) {
@@ -153,6 +152,9 @@ class LoginController {
                 res.status(501);
                 res.send('Sorry! not implemented!');
             });
+            // app.get('/contact', (req, res) => {
+            //     res.render('main/contactus');
+            // });
             app.post('/user', (req, res) => {
                 // TODO: Test only
                 let body = req.body;
