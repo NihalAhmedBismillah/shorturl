@@ -109,7 +109,7 @@ class LoginController {
                         // create a token
                         let secret = `${global.locator.get('config').secret}`;
                         let auth_token = jwt.sign(data, secret, {
-                            expiresIn:300 // putting 5 mints token expire time.  60 * 60 * 24 // expires in 24 hours
+                            expiresIn:60 * 60 * 24//300 // putting 5 mints token expire time.  60 * 60 * 24 // expires in 24 hours
                         });
                         resutl.auth_token = auth_token;
                         let user = { data: resutl };

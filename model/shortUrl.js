@@ -69,7 +69,7 @@ class shortUrl {
     // get Product List 
     static getShortUrls(req) {
 
-        if (!req.params && !!req.params.shorturl) throw new Error('Invalid paramater');
+        if (!req.params && !req.params.shorturl) throw new Error('Invalid paramater');
         let shortid = req.params.shorturl;
         return db.findOne({ '_id': shortid }, COLLECTION_NAME);
     }

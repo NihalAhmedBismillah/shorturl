@@ -2,8 +2,9 @@
 const COLLECTION_NAME = 'Users',
     dbOpt = require('../lib/db'),
     shortid = require('shortid'),
-    Joi = require('joi');
-
+    Joi = require('joi'),
+    _ = require('lodash');
+const DEFAULTPAGESIZE = 3;
 /**
 * Import npm package
 */
@@ -14,37 +15,50 @@ class User {
 
     }
 
+    static getUserList(pageNo) {
+
+        let pageSize = DEFAULTPAGESIZE;
+        return dbOpt.findWithPaginantion(pageNo, pageSize, COLLECTION_NAME);
+    }
+
+    static getUserByEmailId(email) {
+
+        let query = { login: email };
+        return dbOpt.findOne(query, COLLECTION_NAME);
+
+    }
     static saveUser(user) {
 
         return new Promise((res, rej) => {
 
-            let objUser = new UserModel();
-            // TODO: need to assing each fields;
+            let objUser = _.assign(new UserModel(), user);
             objUser._id = shortid.generate();
-            objUser.firstName = user.firstName;
-            objUser.login = user.email;
-            objUser.password = user.password;
-            objUser.email = user.email;
-            objUser.dates.createdOn = new Date().toISOString();
-            //TODO: check User validation
-            dbOpt.save(objUser, COLLECTION_NAME).then((data) => {
-                res(data);
-            }).catch((error) => {
-                rej(error);
-            });
+            let error = User.validateLogin(objUser);
+            if (!error) {
+                dbOpt.save(objUser, COLLECTION_NAME).then((data) => {
+                    res(data);
+                }).catch((error) => {
+                    rej(error);
+                });
+            } else {
+                res(error);
+            }
         });
     }
 
     static validateLogin(user) {
 
         const schema = Joi.object().keys({
-            emailId: Joi.string().email().required(),
-            password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/)
+            email: Joi.string().email().required(),
+            password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
+            login: Joi.string().email().required(),
+            firstName: Joi.string().required(),
+            gender: Joi.string().required()
         });
         const result = Joi.validate({
-            emailId: user.emailId, password: user.password
+            email: user.email, password: user.password, login: user.login, firstName: user.firstName, gender: user.gender
         }, schema);
-        return (result.error) ? true : false;
+        return (result.error) ? result.error : undefined;
     }
 }
 
@@ -68,6 +82,7 @@ class UserModel {
         this.firstName = '';
         this.middleName = '';
         this.lastName = '';
+        this.email = '';
         this.Dob = '';
         this.gender = '';
         this.mobileNo = '';
