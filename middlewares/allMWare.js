@@ -20,12 +20,19 @@ class ClsMiddleware {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
             let token = req.headers.authorization.split(' ')[1];
             let secret = `${global.locator.get('config').secret}`;
-            jwt.verify(token, secret, function (err, decoded) {
-                if (err) {
-                    return res.status('403').json({ success: false, message: 'Failed to authenticate token.' });
+            jwt.verify(token, secret, (error, decoded) => {
+                if (error) {
+                    return res.status('403').json({ success: false, message: error.message });
                 } else {
-                    req.user = decoded;
-                    next();
+                    // check if x-api-key is valid or not   
+                    ClsMiddleware.checkXApiKey(req, res, (error, result) => {
+                        if (!error) {
+                            req.user = decoded;
+                            next();
+                        } else {
+                            return res.status('403').json(error);
+                        }
+                    });
                 }
             });
         } else {
@@ -33,6 +40,17 @@ class ClsMiddleware {
                 success: false,
                 message: 'No token provided.'
             });
+        }
+    }
+
+    static checkXApiKey(req, res, callback) {
+        const xapikey = `${global.locator.get('config').x_api_key}`;
+        const reqxapikey = (req.headers['x-api-key']) ? req.headers['x-api-key'] : undefined;
+        if (!reqxapikey) return callback({ status: false, message: 'Please pass x-api-key in http header.' });
+        if (req.headers['x-api-key'] === xapikey) {
+            callback(undefined);
+        } else {
+            callback({ status: false, message: 'Invalid x-api-key provided.' });
         }
     }
     static init(app) {

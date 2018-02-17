@@ -4,6 +4,9 @@
     "dbConnectionUrl": "mongodb://127.0.0.1:27017/",
     "baseUrl": "http://localhost:8080",
     "secret": "asdfadfadfcx4223ew",
+    "cryptoAlgothm":"aes192",
+    "cryptoPwd":"testabc123!@#$&%$",
+    "x_api_key":"cc5d27ed597676e7d2f6dd911587051c5370ce657113e0b6e5175bad0a1212cb",
     "tokenExpireTime": 20, 
     "schedules": [
         {

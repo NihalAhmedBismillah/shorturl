@@ -109,7 +109,7 @@ class LoginController {
                         // create a token
                         let secret = `${global.locator.get('config').secret}`;
                         let auth_token = jwt.sign(data, secret, {
-                            expiresIn: 60 * 60 * 24 // expires in 24 hours
+                            expiresIn:300 // putting 5 mints token expire time.  60 * 60 * 24 // expires in 24 hours
                         });
                         resutl.auth_token = auth_token;
                         let user = { data: resutl };
@@ -146,32 +146,6 @@ class LoginController {
                 } catch (error) {
                     res.render('main/shortulr');
                 }
-            });
-
-            app.get('/user', (req, res) => {
-                res.status(501);
-                res.send('Sorry! not implemented!');
-            });
-            // app.get('/contact', (req, res) => {
-            //     res.render('main/contactus');
-            // });
-            app.post('/user', (req, res) => {
-                // TODO: Test only
-                let body = req.body;
-                let user = {
-                    firstName: body.firstName,
-                    login: body.email,
-                    password: body.password,
-                    email: body.email
-                };
-                User.saveUser(user).then((data) => {
-                    res.send(data);
-                }).catch((error) => {
-                    console.log(`Error [User Save] ${JSON.stringify(errro)}`);
-                    //TODO: Need to change
-                    res.status(501);
-                    res.send('Sorry! not implemented!');
-                });
             });
 
             resolve(true);

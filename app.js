@@ -11,7 +11,6 @@ class App {
     static async run() {
         try {
             let app = express();
-
             app.use(express.static(__dirname + '/public'));
             app.use(express.static(__dirname + '/client'));
             await dbl.dbConnect();

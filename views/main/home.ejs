@@ -5,6 +5,7 @@
     <% include ../partials/head %>
         <script type="text/javascript">
             $(() => {
+                window.auth_token = document.getElementById('auth_token').value;
                 localStorage.setItem('auth_token', document.getElementById('auth_token').value);
             });
         </script>
