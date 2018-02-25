@@ -14,22 +14,22 @@ class Login {
 
     }
 
-    static  userLogin(user) {
+    static userLogin(user) {
 
         //Task 1 : validate use request   
-        let result  = this.validateLogin(user);
+        let result = this.validateLogin(user);
         if (result) {
             return new Promise((res) => {
                 res(undefined);
             });
         } else {
-            let query = { login: user.emailId, password: user.password };
+            let query = { login: user.emailId, password: user.password, status: 'ACTIVE' };
             return dbOpt.findOne(query, COLLECTION_NAME);
         }
     }
     static getUserByEmailId(email) {
 
-        let query = { login: email };
+        let query = { login: email, status: 'ACTIVE' };
         return dbOpt.findOne(query, COLLECTION_NAME);
 
     }

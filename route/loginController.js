@@ -48,7 +48,7 @@ class LoginController {
                     User.getUserByEmailId(req.session.email.toLowerCase()).then((data) => {
                         if (data && _.isEqual(req.session.password.toLowerCase(), data.password.toLowerCase())) {
                             //  Create session
-                            let session ={};
+                            let session = {};
                             session.userId = data._id;
                             session.email = data.email;
                             session.password = data.password;
@@ -109,7 +109,7 @@ class LoginController {
                         // create a token
                         let secret = `${global.locator.get('config').secret}`;
                         let auth_token = jwt.sign(data, secret, {
-                            expiresIn:60 * 60 * 24//300 // putting 5 mints token expire time.  60 * 60 * 24 // expires in 24 hours
+                            expiresIn: 60 * 60 * 24//300 // putting 5 mints token expire time.  60 * 60 * 24 // expires in 24 hours
                         });
                         resutl.auth_token = auth_token;
                         let user = { data: resutl };
@@ -148,8 +148,52 @@ class LoginController {
                 }
             });
 
+            app.post('/jsonwebtoken', (req, res) => {
+                LoginController.checkXApiKey(req, (error, result) => {
+                    if (!error) {
+                        User.getUserByEmailId(req.body.email.toLowerCase()).then((data) => {
+
+                            if (data) {
+                                delete data.password;
+                                // create a token
+                                let secret = `${global.locator.get('config').secret}`;
+                                let auth_token = jwt.sign(data, secret, {
+                                    expiresIn: 60 * 60 * 24// 60 * 60 * 24 // expires in 24 hours
+                                });
+                                res.status('200').json({
+                                    success: true,
+                                    message: 'token generated!',
+                                    token: auth_token
+                                });
+                            } else {
+                                res.status(404).json({"Error":"User not found"});
+                            }
+
+                        }).catch((error) => {
+                            res.status(500);
+                            console.log(`Error : ${JSON.stringify(error)}`);
+                            res.send(`Internal Server Error`);
+                        });
+                    } else {
+                        return res.status('403').json(error);
+                    }
+                });
+            });
             resolve(true);
         });
+    }
+
+    static checkXApiKey(req, callback) {
+
+        const xapikey = `${global.locator.get('config').x_api_key}`;
+        const reqxapikey = (req.headers['x-api-key']) ? req.headers['x-api-key'] : undefined;
+        const body = req.body;
+        if (!reqxapikey) return callback({ status: false, message: 'Please pass x-api-key in http header.' });
+        if (!body && !body.email) return callback({ status: false, message: 'Please pass email id' });
+        if (req.headers['x-api-key'] === xapikey) return callback(undefined);
+        else
+            callback({ status: false, message: 'Invalid x-api-key provided.' });
+
     }
 }
 

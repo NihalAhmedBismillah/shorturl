@@ -65,12 +65,62 @@ class UserController {
             });
             app.delete('/api/v1/users/soft/:email', (req, res) => {
 
-                //TODO: Need to implement delete
-                res.send('soft');
+                if (req.params && req.params.email) {
+                    User.getUserByEmailId(req.params.email).then((user) => {
+                        if (user) {
+                            let updateFields = {
+                                status: 'INACTIVE', dates: {
+                                    statusChangeOn: new Date().toISOString(),
+                                    updateOn: new Date().toISOString()
+                                }
+                            };
+                            let updateUser = _.assign(user, updateFields);
+                            User.updateUser(updateUser).then((data) => {
+                                res.status(200).json({ status: `success`, message: 'data updated' });
+                            }).catch((error) => {
+                                console.log(`Error [User delete] ${JSON.stringify(errro)}`);
+                                //TODO: Need to change
+                                res.status(501);
+                                res.send({ error: { message: 'server side error', statusCode: '501' } });
+                            });
+                        } else {
+                            res.status(404).json({ error: { message: 'User not found', statusCode: '404' } });
+                        }
+
+                    }).catch((error) => {
+                        res.status(400);
+                        res.json({ error: { message: 'Bad parameter request', statusCode: '400' } });
+                    });
+                } else {
+                    res.status(400);
+                    res.send({ error: { message: 'Bad parameter request', statusCode: '400' } });// TODO: need to implement generic error handling, in next sprint will be impement with some analysis 
+                }
             });
             app.delete('/api/v1/users/hard/:email', (req, res) => {
-                //TODO: Need to implement delete
-                res.send('hard');
+                if (req.params && req.params.email) {
+                    User.getUserByEmailId(req.params.email).then((user) => {
+                        if (user) {
+                            
+                            User.removeUser(user._id).then((data) => {
+                                res.status(200).json({ status: `success`, message: 'data updated' });
+                            }).catch((error) => {
+                                console.log(`Error [User delete] ${JSON.stringify(errro)}`);
+                                //TODO: Need to change
+                                res.status(501);
+                                res.send({ error: { message: 'server side error', statusCode: '501' } });
+                            });
+                        } else {
+                            res.status(404).json({ error: { message: 'User not found', statusCode: '404' } });
+                        }
+
+                    }).catch((error) => {
+                        res.status(400);
+                        res.json({ error: { message: 'Bad parameter request', statusCode: '400' } });
+                    });
+                } else {
+                    res.status(400);
+                    res.send({ error: { message: 'Bad parameter request', statusCode: '400' } });// TODO: need to implement generic error handling, in next sprint will be impement with some analysis 
+                }
             });
             resolve(true);
         });

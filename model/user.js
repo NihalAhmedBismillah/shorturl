@@ -4,7 +4,7 @@ const COLLECTION_NAME = 'Users',
     shortid = require('shortid'),
     Joi = require('joi'),
     _ = require('lodash');
-const DEFAULTPAGESIZE = 3;
+const DEFAULTPAGESIZE = 5;
 /**
 * Import npm package
 */
@@ -23,7 +23,7 @@ class User {
 
     static getUserByEmailId(email) {
 
-        let query = { login: email };
+        let query = { login: email, status: 'ACTIVE' };
         return dbOpt.findOne(query, COLLECTION_NAME);
 
     }
@@ -32,19 +32,62 @@ class User {
         return new Promise((res, rej) => {
 
             let objUser = _.assign(new UserModel(), user);
+            objUser.login = objUser.email;
             objUser._id = shortid.generate();
             let error = User.validateLogin(objUser);
             if (!error) {
-                dbOpt.save(objUser, COLLECTION_NAME).then((data) => {
-                    res(data);
+                // Check duplicate Account
+                let query = { email: objUser.email };
+                dbOpt.findOne(query, COLLECTION_NAME).then((data) => {
+                    if (!data) {
+                        dbOpt.save(objUser, COLLECTION_NAME).then((data) => {
+                            res(data);
+                        }).catch((error) => {
+                            rej(error);
+                        });
+                    } else {
+                        res({ message: 'User email id exist in system' });
+                    }
                 }).catch((error) => {
                     rej(error);
                 });
+
             } else {
                 res(error);
             }
         });
     }
+    static updateUser(updateUser) {
+
+        return new Promise((resolve, reject) => {
+            dbOpt.save(updateUser, COLLECTION_NAME).then((data) => {
+                if (data) {
+                    resolve(data);
+                } else {
+                    resolve();
+                }
+            }).catch((error) => {
+                reject(error);
+            });
+        });
+    }
+
+    static removeUser(userId) {
+
+        return new Promise((resolve, reject) => {
+            let query = { _id: userId };
+            dbOpt.remove(query, COLLECTION_NAME).then((data) => {
+                if (data) {
+                    resolve(data);
+                } else {
+                    resolve();
+                }
+            }).catch((error) => {
+                reject(error);
+            })
+        });
+    }
+
 
     static validateLogin(user) {
 
